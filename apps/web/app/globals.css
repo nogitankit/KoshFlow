@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-fill-1: rgba(255, 255, 255, 0.1);
+
+  --color-bank-gradient: #0179fe;
+
+  --color-indigo-500: #6172f3;
+  --color-indigo-700: #3538cd;
+
+  --color-success-25: #f6fef9;
+  --color-success-50: #ecfdf3;
+  --color-success-100: #d1fadf;
+  --color-success-600: #039855;
+  --color-success-700: #027a48;
+  --color-success-900: #054f31;
+
+  --color-pink-25: #fef6fb;
+  --color-pink-100: #fce7f6;
+  --color-pink-500: #ee46bc;
+  --color-pink-600: #dd2590;
+  --color-pink-700: #c11574;
+  --color-pink-900: #851651;
+
+  --color-blue-25: #f5faff;
+  --color-blue-100: #d1e9ff;
+  --color-blue-500: #2e90fa;
+  --color-blue-600: #1570ef;
+  --color-blue-700: #175cd3;
+  --color-blue-900: #194185;
+
+  --color-sky-1: #f3f9ff;
+
+  --color-black-1: #00214f;
+  --color-black-2: #344054;
+
+  --color-gray-25: #fcfcfd;
+  --color-gray-200: #eaecf0;
+  --color-gray-300: #d0d5dd;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-900: #101828;
+
+  /* Fonts */
+  --font-inter: var(--font-inter);
+  --font-ibm-plex-serif: var(--font-ibm-plex-serif);
+
+  /* Container */
+  --container-2xl: 1400px;
+}
