@@ -5,7 +5,7 @@
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "../../packages/ui/src/styles/globals.css",
+    "css": "app/globals.css",
     "baseColor": "neutral",
     "cssVariables": true
   },
@@ -15,7 +15,7 @@
     "hooks": "@/hooks",
     "lib": "@/lib",
     "utils": "@workspace/ui/lib/utils",
-    "ui": "@workspace/ui/components"
+    "ui": "@/components/ui"
   },
   "rtl": false,
   "menuColor": "default",
