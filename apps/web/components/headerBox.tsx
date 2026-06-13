@@ -1,4 +1,4 @@
-import rafce from 'react'
+import react from 'react'
 
 const HeaderBox = ({type='title', title, user, subtext}: HeaderBoxProps) => {
   return(

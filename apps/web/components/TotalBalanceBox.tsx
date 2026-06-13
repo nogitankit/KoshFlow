@@ -1,13 +1,13 @@
 import react from 'react'
 import { formatAmount } from '@/lib/utils'
-import Counter from './Counter'
+import Counter from '@/components/Counter'
+import Doughnut from '@/components/Doughnut'
 
 export default function TotalBalanceBox({accounts=[], totalBanks, totalCurrentBalance}: TotalBalanceBoxProps){
-  const formattedBalance = formatAmount(totalCurrentBalance)
-  console.log(typeof(totalCurrentBalance))
     return(
     <section className="total-balance">
       <div className="total-balance-chart">
+      <Doughnut accounts={accounts}/>
       </div>
 
       <div className="flex flex-col gap-6">
