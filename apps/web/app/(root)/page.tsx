@@ -1,9 +1,12 @@
 import React from 'react'
 import HeaderBox from '@/components/headerBox'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
+import RightSidebar from '@/components/RightSidebar'
 const HomePage = () => {
   const loggedIn = {
-    userName: 'Superuser'
+    firstName: 'Superuser',
+    lastName: 'SU',
+    email: 'nomailankit@gmail.com'
   }
 
   return(
@@ -13,16 +16,23 @@ const HomePage = () => {
           <HeaderBox 
             type="greeting"
             title="Welcome"
-            user={loggedIn?.userName || "Guest"}
+            user={loggedIn?.firstName || "Guest"}
             subtext="Welcome to KoshFlow. Manage your Accounts and Transactions Securely and Efficiently."
           />
-        </header>
+        
         <TotalBalanceBox 
           accounts={[]}
           totalBanks={1}
           totalCurrentBalance={69.420}
         />
+        </header>
+        RECENT TRANSACTIONS
       </div>
+      <RightSidebar
+       user={loggedIn}  
+       transactions={[]}
+       banks={[]}
+      />
     </section>
   )
 }

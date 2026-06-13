@@ -183,7 +183,13 @@
 }
 
 @utility profile-banner {
-  @apply h-[120px] w-full bg-gradient-mesh bg-cover bg-no-repeat;
+  @apply h-[120px] w-full;
+  background-image:
+  url('/icons/gradient-mesh.svg'),
+    linear-gradient(135deg, #3b82f6 0%, #1d4ed8 55%, #1e3a8a 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 @utility profile {
