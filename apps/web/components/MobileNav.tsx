@@ -27,6 +27,9 @@ export default function MobileNav() {
             <SheetTitle className="sr-only">
               Navigation Menu
             </SheetTitle>
+            <SheetDescription className="sr-only">
+              Browse application pages and navigate through KoshFlow.
+            </SheetDescription>
             <Link href='/' className='cursor-pointer items-center gap-2 p-4 flex'>
             <Image
               src='/icons/logo.svg'

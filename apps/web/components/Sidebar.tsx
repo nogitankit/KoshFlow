@@ -40,7 +40,7 @@ export default function Sidebar({user}: SidebarProps) {
             </div>
             <p className={cn(
               'sidebar-label',{
-              '!text-white': isActive
+              'text-white!': isActive
             })} 
             >{item.label}</p>
           </Link>
