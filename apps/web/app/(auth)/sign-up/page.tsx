@@ -1,8 +1,9 @@
-import rafce from 'react'
-
-const SignUp = () => {
+import react from 'react'
+import AuthForm from '@/components/AuthForm'
+export default function SignIn() {
   return(
-    <main> SignUp</main>
+    <section className='flex-center size-full max-sm:px-6'>
+      <AuthForm type='sign-up' />
+    </section>
   )
 }
-export default SignUp

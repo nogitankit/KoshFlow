@@ -195,18 +195,102 @@ export const getTransactionStatus = (date: Date) => {
 
   return date > twoDaysAgo ? "Processing" : "Success";
 };
+export const authFormSchema = (type: string) =>
+  z.object({
+    // Sign Up Only
+    firstName:
+      type === "sign-in"
+        ? z.string().optional()
+        : z.string()
+            .min(3, {
+              message: "First name must be at least 3 characters.",
+            }),
 
-export const authFormSchema = (type: string) => z.object({
-  // sign up
-  firstName: type === 'sign-in' ? z.string().optional() : z.string().min(3),
-  lastName: type === 'sign-in' ? z.string().optional() : z.string().min(3),
-  address1: type === 'sign-in' ? z.string().optional() : z.string().max(50),
-  city: type === 'sign-in' ? z.string().optional() : z.string().max(50),
-  state: type === 'sign-in' ? z.string().optional() : z.string().min(2).max(2),
-  postalCode: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(6),
-  dateOfBirth: type === 'sign-in' ? z.string().optional() : z.string().min(3),
-  ssn: type === 'sign-in' ? z.string().optional() : z.string().min(3),
-  // both
-  email: z.string().email(),
-  password: z.string().min(8),
+    lastName:
+      type === "sign-in"
+        ? z.string().optional()
+        : z.string()
+            .min(3, {
+              message: "Last name must be at least 3 characters.",
+            }),
+
+    address1:
+      type === "sign-in"
+        ? z.string().optional()
+        : z.string()
+            .min(3, {
+              message: "Please enter a valid address.",
+            })
+            .max(50, {
+              message: "Address cannot exceed 50 characters.",
+            }),
+
+    city:
+      type === "sign-in"
+        ? z.string().optional()
+        : z.string()
+            .min(2, {
+              error: "Please enter a valid city.",
+            })
+            .max(50, {
+              error: "City name is too long.",
+            }),
+
+    state:
+      type === "sign-in"
+        ? z.string().optional()
+        : z.string()
+            .min(3, {
+              error: "Enter a valid state.",
+            })
+            .max(20,{
+              error: "State name is too long."
+            }),
+
+    postalCode:
+      type === "sign-in"
+        ? z.string().optional()
+        : z.string()
+            .min(3, {
+              error: "Please enter a valid postal code.",
+            })
+            .max(10, {
+              error: "Postal code is too long.",
+            }),
+
+    dateOfBirth:
+      type === "sign-in"
+        ? z.string().optional()
+        : z.string().min(1, {
+            error: "Date of birth is required.",
+          }),
+
+    // Both Sign In & Sign Up
+    email: z.email({
+      error: "Please enter a valid email address.",
+    }),
+
+    password: z.string().min(8, {
+      message: "Password must be at least 8 characters long.",
+    }),
+  });
+
+
+/*
+export const formSchema = z.object({
+  firstName: z.string().min(3).max(20),
+  lastName: z.string().min(3).max(20),
+  address: z.string().min(3).max(50),
+  state: z.string().min(3).max(20),
+  postalCode: z.string().min(3).max(10),
+  dob: z.string().min(3).max(10),
+  //sign-in
+  email: z.email({
+    error: "Invalid email"
+  }),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters.")
+    .max(30, "Password must be at most 30 characters."),
 })
+    */
