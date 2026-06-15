@@ -2,11 +2,22 @@ import React from 'react'
 import HeaderBox from '@/components/headerBox'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
 import RightSidebar from '@/components/RightSidebar'
-const HomePage = () => {
+import { createClient } from '@/utils/supabase/server'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+
+const HomePage = async () => {
+  const cookieStore = await cookies()
+  const supabase = await createClient(cookieStore)
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    redirect('/sign-in')
+  }
+
   const loggedIn = {
-    firstName: 'Superuser',
-    lastName: 'SU',
-    email: 'nomailankit@gmail.com'
+    firstName: user.user_metadata?.first_name || 'Guest',
+    lastName: user.user_metadata?.last_name || '',
+    email: user.email || '',
   }
 
   return(
@@ -29,7 +40,7 @@ const HomePage = () => {
         RECENT TRANSACTIONS
       </div>
       <RightSidebar
-       user={loggedIn}  
+       user={user}  
        transactions={[]}
        banks={[{currentBalance: 69.32}, {currentBalance: 500.02}]}
       />

@@ -1,5 +1,6 @@
 'use client'
 import react from 'react'
+import type { User } from '@supabase/supabase-js'
 import Link from 'next/link'
 import Image from 'next/image'
 import Form from './Form'
@@ -39,17 +40,15 @@ export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
     defaultValues,
     shouldUnregister: true,
   })
-  const [user, setUser] = react.useState(null)
+  const [user, setUser] = react.useState<User | null>(null)
   const [isLoading, setIsLoading] = react.useState(false)
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try{
-      //configure database first
-
       if(type === 'sign-up'){
-        const newUser = await signUp(data);
-        setUser(newUser)
+        const response = await signUp(data)
+        setUser(response.user)
       }
       else if(type === 'sign-in'){
         const response = await signIn({
