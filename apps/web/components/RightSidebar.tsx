@@ -6,7 +6,7 @@ import type { User } from '@supabase/supabase-js'
 
 export default function RightSidebar({user, transactions, banks}: { user: User, transactions: Transaction[], banks: any[] }) {
   const firstName = user?.user_metadata?.first_name || user?.email || 'User'
-  const lastName = user?.user_metadata?.last_name || ''
+  const name = user.user_metadata.full_name
   return(
     <aside className='right-sidebar'>
       <section className='flex flex-col pb-7'>
@@ -17,7 +17,7 @@ export default function RightSidebar({user, transactions, banks}: { user: User, 
           </div>
           <div className='profile-details'>
             <h1 className='profile-name'>
-              {firstName} {lastName}
+              {name}
             </h1>
             <p className='profile-email'>
               {user?.email || ''}
@@ -41,7 +41,7 @@ export default function RightSidebar({user, transactions, banks}: { user: User, 
               <BankCard 
                 key={banks[0].$id}
                 account={banks[0]}
-                userName={`${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`}
+                userName={name}
                 showBalance={false}
               />
             </div>
@@ -50,7 +50,7 @@ export default function RightSidebar({user, transactions, banks}: { user: User, 
                 <BankCard 
                   key={banks[1].$id}
                   account={banks[1]}
-                  userName={`${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`}
+                  userName={name}
                   showBalance={false}
                 />
               </div>

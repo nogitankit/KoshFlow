@@ -209,7 +209,7 @@ declare interface TotalBalanceBoxProps {
 }
 
 declare interface FooterProps {
-  user: User;
+  user: import('@supabase/supabase-js').User;
   type?: 'mobile' | 'desktop'
 }
 

@@ -9,8 +9,8 @@ export default async function RootLayout({
   children,
 }: Readonly<{children: React.ReactNode}>) {
   const cookieStore = await cookies()
-    const supabase = await createClient(cookieStore)
-    const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient(cookieStore)
+  const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
     redirect('/sign-in')
