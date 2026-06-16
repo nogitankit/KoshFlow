@@ -14,6 +14,7 @@ import { Field, FieldGroup } from "@/components/ui/field"
 import { authFormSchema } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/actions/user.actions'
+import PlaidLink from "./PlaidLink"
 
 
 export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
@@ -45,10 +46,35 @@ export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    try{
+    try{ //maybe its _metadata
       if(type === 'sign-up'){
-        const response = await signUp(data)
-        setUser(response.user)
+        const userData = {
+        firstName: data.firstName!,
+        lastName: data.lastName!,
+        address1: data.address1!,
+        city: data.city!,
+        state: data.state!,
+        postalCode: data.postalCode!,
+        dateOfBirth: data.dateOfBirth!,
+        email: data.email,
+        password: data.password,
+      }
+        const response = await signUp(userData)
+        if (response.user) {
+          setUser({
+            $id: response.user.id,
+            userId: response.user.id,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            name: `${userData.firstName} ${userData.lastName}`,
+            address1: userData.address1,
+            city: userData.city,
+            state: userData.state,
+            postalCode: userData.postalCode,
+            dateOfBirth: userData.dateOfBirth,
+          } as any)
+        }
       }
       else if(type === 'sign-in'){
         const response = await signIn({
@@ -91,7 +117,7 @@ export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
               <p className='text-16 font-normal text-gray-600'>
                 {user 
                 ? "Link your account to get started!" 
-                : "Please enter your details."
+                : "Please enter your details." 
                 }
               </p>
             </div>
@@ -99,7 +125,7 @@ export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
       {
         user ? (
           <div className='flex flex-col gap-4'>
-            {/* PLAID LINK */}
+            <PlaidLink user={user} variant='primary'/>
           </div>
         )
         : (
