@@ -5,20 +5,22 @@ import BankCard from './BankCard'
 import type { User } from '@supabase/supabase-js'
 
 export default function RightSidebar({user, transactions, banks}: { user: User, transactions: Transaction[], banks: any[] }) {
+  const firstName = user?.user_metadata?.first_name || user?.email || 'User'
+  const lastName = user?.user_metadata?.last_name || ''
   return(
     <aside className='right-sidebar'>
       <section className='flex flex-col pb-7'>
         <div className='profile-banner' />
         <div className='profile'>
           <div className='profile-img'>
-            <span className='text-5xl font-bold text-blue-500'>{user.user_metadata.first_name[0]}</span>
+            <span className='text-5xl font-bold text-blue-500'>{firstName[0]?.toUpperCase()}</span>
           </div>
           <div className='profile-details'>
             <h1 className='profile-name'>
-              {user.user_metadata.first_name} {user.user_metadata.last_name}
+              {firstName} {lastName}
             </h1>
             <p className='profile-email'>
-              {user.email}
+              {user?.email || ''}
             </p>
           </div>
         </div>

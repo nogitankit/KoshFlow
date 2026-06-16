@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import Footer from './Footer'                       
 import {
   Sheet,
   SheetClose,
@@ -15,7 +16,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-export default function MobileNav() {
+export default function MobileNav({user} : MobileNavProps) {
   const pathName = usePathname()
   return(
     <section className='w-full max-w-66'>
@@ -69,7 +70,7 @@ export default function MobileNav() {
                   USER
                 </nav>
               </SheetClose>
-              FOOTER
+              <Footer  user={user} type="mobile"/>
             </div>
         
           </SheetContent>

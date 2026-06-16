@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
-import { BrickWall } from 'lucide-react'
+import Footer from './Footer'
 export default function Sidebar({user}: SidebarProps) {
   const pathName = usePathname() 
   return(
@@ -48,7 +48,7 @@ export default function Sidebar({user}: SidebarProps) {
         })}
         USER
       </nav>
-      FOOTER
+      <Footer user={user} />
     </section>
   )
 }
