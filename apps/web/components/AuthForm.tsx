@@ -147,7 +147,7 @@ export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
                   <Form control={form.control} type='city' name='City' placeholder='e.g. Mumbai'/>
                   <div className='flex gap-4'>
                     <Form control={form.control} type='state' name='State' placeholder='e.g. Mumbai'/>
-                    <Form control={form.control} type='postalCode' name='Postal Code' placeholder='e.g. 11101'/>
+                    <Form control={form.control} type='postalCode' name='Postal Code' placseholder='e.g. 11101'/>
                   </div>
                   
                   <Form control={form.control} type='dateOfBirth' name='Date of Birth' placeholder='DD-MM-YYYY'/>

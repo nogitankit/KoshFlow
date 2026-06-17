@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { getUserInfo } from '@/lib/actions/user.actions'
 
 export default async function RootLayout({
   children,
@@ -16,17 +17,19 @@ export default async function RootLayout({
     redirect('/sign-in')
   }
 
+  const loggedIn = await getUserInfo({ userId: user.id })
+
   return (
     <main className="flex h-screen w-full font-inter">
-      <Sidebar user={user} />
+      <Sidebar user={loggedIn} />
       <div className='flex size-full flex-col'>
         <div className='root-layout'>
           <Image src='/icons/logo.svg' width={30} height={30} alt='menu icon' />
           <div>
-            <MobileNav user={user} />
+            <MobileNav user={loggedIn} />
           </div>
         </div>
-        {children}
+      {children}
       </div>
     </main>
   )

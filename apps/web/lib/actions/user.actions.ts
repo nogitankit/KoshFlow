@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { CountryCode, Products } from "plaid";
+
 import { plaidClient } from "@/lib/plaid";
 import { encryptId, parseStringify } from "../utils";
 import { revalidatePath } from "next/cache";
@@ -25,6 +26,26 @@ export async function signIn({ email, password }: { email: string; password: str
     return data;
   } catch (err) {
     console.error('Sign-in error:', err);
+    throw err;
+  }
+}
+
+export async function getUserInfo({ userId }: getUserInfoProps) {
+  try {
+    const cookieStore = await cookies();
+    const supabase = await createClient(cookieStore);
+
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('userId', userId)
+      .single();
+
+    if (error) throw error;
+
+    return parseStringify(data);
+  } catch (err) {
+    console.error('Error getting user info:', err);
     throw err;
   }
 }
@@ -113,7 +134,7 @@ export async function createLinkToken(user: User){
         client_user_id: user.$id || user.id,
       },
       client_name: user.name || `${user.firstName} ${user.lastName}`,
-      products:['auth'] as Products[],
+      products:['auth', 'transactions'] as Products[],
       language: 'en',
       country_codes:['US'] as CountryCode[],
     }
@@ -130,7 +151,6 @@ export async function createBankAccount(
   bankId,
   accountId,
   accessToken,
-  fundingSourceUrl,
   shareableId}: createBankAccountProps){
     try{
       const cookieStore = await cookies();
@@ -139,12 +159,11 @@ export async function createBankAccount(
       const { data, error } = await supabase
         .from('banks')
         .insert({
-          user_id: userId,
-          bank_id: bankId,
-          account_id: accountId,
+          userId: userId,
+          bankId: bankId,
+          accountId: accountId,
           access_token: accessToken,
-          funding_source_url: fundingSourceUrl,
-          shareable_id: shareableId,
+          shareableId: shareableId,
         })
         .select()
         .single();
@@ -165,44 +184,67 @@ export async function exchangePublicToken({publicToken, user}: exchangePublicTok
     });
     const accessToken = response.data.access_token
     const itemId = response.data.item_id
-    //get account info from plaid using access token
+
+    // Get account info from Plaid using access token
     const accountResponse = await plaidClient.accountsGet({
       access_token: accessToken,
     });
     const accountData = accountResponse.data.accounts[0];
-    //create a processor token for Dwolla using the access token & account ID
-    const request: ProcessorTokenCreateRequest = {
-      access_token: accessToken,
-      account_id: accountData.account_id,
-      processor: "dwolla" as ProcessorTokenCreateRequestProcessorEnum,
-    };
-    const processorTokenResponse = await plaidClient.processorTokenCreate(request)
-    const processorToken = processorTokenResponse.data.processor_token
-    //funding source url 
-    const fundingSourceUrl = await addFundingSource({
-      dwollaCustomerId: user.dwollaCustomerId,
-      processorToken,
-      bankName: accountData.name,
-    })
-    if(!fundingSourceUrl) throw Error('Failed to add funding source')
-    //create bank account
+
+    // Create bank account record with Plaid access token
     await createBankAccount({
       userId: user.$id,
       bankId: itemId,
       accountId: accountData.account_id,
       accessToken,
-      fundingSourceUrl,
-      sharableId: encryptId(accountData.account_id)
+      shareableId: encryptId(accountData.account_id)
     })
+
     revalidatePath('/')
     return parseStringify({
       publicTokenExchange: "complete"
     })
-    
-    
   }
   catch(err){
     console.error(err)
   }
+}
 
+export async function getBanks({ userId }: getBanksProps) {
+  try {
+    const cookieStore = await cookies();
+    const supabase = await createClient(cookieStore);
+
+    const { data, error } = await supabase
+      .from('banks')
+      .select('*')
+      .eq('userId', userId);
+
+    if (error) throw error;
+
+    return parseStringify(data);
+  } catch (err) {
+    console.error('Error getting banks:', err);
+    return [];
+  }
+}
+
+export async function getBank({ documentId }: getBankProps) {
+  try {
+    const cookieStore = await cookies();
+    const supabase = await createClient(cookieStore);
+
+    const { data, error } = await supabase
+      .from('banks')
+      .select('*')
+      .eq('accountId', documentId)
+      .single();
+
+    if (error) throw error;
+
+    return parseStringify(data);
+  } catch (err) {
+    console.error('Error getting bank:', err);
+    throw err;
+  }
 }

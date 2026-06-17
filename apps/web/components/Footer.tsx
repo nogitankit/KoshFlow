@@ -1,16 +1,15 @@
 'use client'
 
-import type { User } from '@supabase/supabase-js'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 
-export default function Footer({user, type}: { user: User, type: string }){
+export default function Footer({user, type}: FooterProps){
   const router = useRouter()
-  const name = user.user_metadata.full_name
-  const firstName = user?.user_metadata?.first_name || user?.email || 'User'
-  const email = user.user_metadata.email
+  const name = `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'User'
+  const firstName = user?.firstName || user?.email || 'User'
+  const email = user?.email || ''
 
   const handleLogOut = async () => {
     const supabase = createClient()

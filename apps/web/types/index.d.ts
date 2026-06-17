@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 declare type SearchParamProps = {
-  params: { [key: string]: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ [key: string]: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 // ========================================
@@ -26,6 +26,7 @@ declare type LoginUser = {
 
 declare type User = {
   $id: string;
+  id?: string;
   email: string;
   userId: string;
   firstName: string;
@@ -55,13 +56,12 @@ declare type Account = {
   name: string;
   type: string;
   subtype: string;
-  appwriteItemId: string;
+  itemId: string;
   shareableId: string;
 };
 
 declare type Transaction = {
   id: string;
-  $id: string;
   name: string;
   paymentChannel: string;
   type: string;
@@ -71,19 +71,17 @@ declare type Transaction = {
   category: string;
   date: string;
   image: string;
-  type: string;
-  $createdAt: string;
+  created_at: string;
   channel: string;
   senderBankId: string;
   receiverBankId: string;
 };
 
 declare type Bank = {
-  $id: string;
+  id: string;
   accountId: string;
   bankId: string;
-  accessToken: string;
-  fundingSourceUrl: string;
+  access_token: string;
   userId: string;
   shareableId: string;
 };
@@ -109,8 +107,8 @@ declare type Receiver = {
 };
 
 declare type TransferParams = {
-  sourceFundingSourceUrl: string;
-  destinationFundingSourceUrl: string;
+  sourceBankId: string;
+  destinationBankId: string;
   amount: string;
 };
 
@@ -124,7 +122,7 @@ declare interface CreditCardProps {
 
 declare interface BankInfoProps {
   account: Account;
-  appwriteItemId?: string;
+  itemId?: string;
   type: "full" | "card";
 }
 
@@ -178,7 +176,7 @@ declare interface BankDropdownProps {
 
 declare interface BankTabItemProps {
   account: Account;
-  appwriteItemId?: string;
+  itemId?: string;
 }
 
 declare interface TotalBalanceBoxProps {
@@ -188,7 +186,7 @@ declare interface TotalBalanceBoxProps {
 }
 
 declare interface FooterProps {
-  user: import('@supabase/supabase-js').User;
+  user: User;
   type?: 'mobile' | 'desktop'
 }
 
@@ -205,7 +203,7 @@ declare interface SidebarProps {
 declare interface RecentTransactionsProps {
   accounts: Account[];
   transactions: Transaction[];
-  appwriteItemId: string;
+  itemId: string;
   page: number;
 }
 
@@ -240,7 +238,7 @@ declare interface getAccountsProps {
 }
 
 declare interface getAccountProps {
-  appwriteItemId: string;
+  itemId: string;
 }
 
 declare interface getInstitutionProps {
@@ -286,7 +284,6 @@ declare interface createBankAccountProps {
   userId: string;
   accountId: string;
   bankId: string;
-  fundingSourceUrl: string;
   shareableId: string;
 }
 

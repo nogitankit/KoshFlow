@@ -2,11 +2,10 @@ import react from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import BankCard from './BankCard'
-import type { User } from '@supabase/supabase-js'
 
-export default function RightSidebar({user, transactions, banks}: { user: User, transactions: Transaction[], banks: any[] }) {
-  const firstName = user?.user_metadata?.first_name || user?.email || 'User'
-  const name = user.user_metadata.full_name
+export default function RightSidebar({user, transactions, banks}: RightSidebarProps) {
+  const firstName = user?.firstName || user?.email || 'User'
+  const name = `${user?.firstName} ${user?.lastName}`
   return(
     <aside className='right-sidebar'>
       <section className='flex flex-col pb-7'>

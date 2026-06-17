@@ -5,20 +5,28 @@ import RightSidebar from '@/components/RightSidebar'
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { getAccounts, getAccount } from '@/lib/actions/bank.actions'
+import { getUserInfo } from '@/lib/actions/user.actions'
 
-const HomePage = async () => {
+const HomePage = async ({ searchParams }: SearchParamProps) => {
+  const { id, page } = await searchParams;
   const cookieStore = await cookies()
   const supabase = await createClient(cookieStore)
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     redirect('/sign-in')
   }
+  const loggedIn = await getUserInfo({ userId: user.id })
+  const accounts = await getAccounts({userId: loggedIn.userId}) 
+  const accountsData = accounts?.data
+  if(!accounts) return;
+  const itemId = (id as string) || accountsData[0]?.itemId;
+  const account = await getAccount({ itemId });
 
-  const loggedIn = {
-    firstName: user.user_metadata?.first_name || 'Guest',
-    lastName: user.user_metadata?.last_name || '',
-    email: user.email || '',
-  }
+  console.log({
+    accountsData,
+    account
+  })
 
   return(
     <section className='home'>
@@ -32,17 +40,17 @@ const HomePage = async () => {
           />
         
         <TotalBalanceBox 
-          accounts={[]}
-          totalBanks={1}
-          totalCurrentBalance={69.420}
+          accounts={[accountsData]}
+          totalBanks={accounts?.totalBanks}
+          totalCurrentBalance={accounts?.totalCurrentBalance}
         />
         </header>
         RECENT TRANSACTIONS
       </div>
       <RightSidebar
-       user={user}  
-       transactions={[]}
-       banks={[{currentBalance: 69.32}, {currentBalance: 500.02}]}
+       user={loggedIn}  
+       transactions={accounts?.transactions}
+       banks={accountsData?.slice(0, 2)}
       />
     </section>
   )
