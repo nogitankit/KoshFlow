@@ -4,7 +4,7 @@ import Counter from '@/components/Counter'
 import Doughnut from '@/components/Doughnut'
 
 export default function TotalBalanceBox({accounts=[], totalBanks, totalCurrentBalance}: TotalBalanceBoxProps){
-    return(
+  return(
     <section className="total-balance">
       <div className="total-balance-chart">
       <Doughnut accounts={accounts}/>

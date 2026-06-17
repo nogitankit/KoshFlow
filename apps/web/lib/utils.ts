@@ -74,7 +74,10 @@ export function formatAmount(amount: number): string {
     minimumFractionDigits: 2,
   });
 
-  return formatter.format(amount);
+  return formatter.format(amount*100);
+}
+export function toInr(amount: number): number {
+  return amount*100
 }
 
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
@@ -82,6 +85,11 @@ export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
 export const removeSpecialCharacters = (value: string) => {
   return value.replace(/[^\w\s]/gi, "");
 };
+
+export const formatCategory = (value: string) => {
+  return value.replace(/_/g, " ");
+};
+
 
 interface UrlQueryParams {
   params: string;
