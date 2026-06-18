@@ -8,10 +8,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { formatAmount, formatCategory, formatDateTime, getTransactionStatus, removeSpecialCharacters } from "@/lib/utils";
+import { cn, formatAmount, formatCategory, formatDateTime, getTransactionStatus, removeSpecialCharacters } from "@/lib/utils";
+import clsx from 'clsx'
+import { transactionCategoryStyles } from "@/constants";
+
+export function CategoryBadge({category}: CategoryBadgeProps){
+  const {borderColor, backgroundColor, textColor,chipBackgroundColor} = transactionCategoryStyles[category as keyof typeof transactionCategoryStyles] || transactionCategoryStyles.default
+
+  return(
+    <div className={cn('category-badge', borderColor, chipBackgroundColor)}>
+      <div className={cn('size-2 rounded-full', backgroundColor)} />
+      <p className={cn('text-[12px] font-medium', textColor)}>
+        {category}
+      </p>
+    </div>
+  )
+}
 
 export default function TransactionTable({transactions}: TransactionTableProps){
-  console.log(transactions)
   return(
     <Table>
     <TableHeader className="bg-[#f9fafb]">
@@ -32,28 +46,36 @@ export default function TransactionTable({transactions}: TransactionTableProps){
         const isDebit = t.type === 'debit'
         const isCredit = t.type === 'credit'
         return (
-          <TableRow key={t.id}>
-            <TableCell>
-              <div>
-                <h1>
+          <TableRow key={t.id} className={
+            clsx('!over:bg-none border-b-default', {
+              'bg-[#f5e0e0]': isDebit || amount[0] === '-',
+              'bg-[#beefd0]': isCredit || amount[0] != '-',
+            })
+          }>
+            <TableCell className="max-w-[250px] pl-2 pr-10">
+              <div className="flex items-center gap-3">
+                <h1 className="text-14 truncate font-semibold text-[#344054]">
                   {removeSpecialCharacters(t.name)}
                 </h1>
               </div>
             </TableCell>
-            <TableCell>
+            <TableCell className={clsx( "pl-2 pr-10 font-semibold", {
+              'text-[#f04438]': isDebit || amount[0] === '-',
+              'text-[#039855]': isCredit || amount[0] != '-',
+            })}>
               {isDebit ? `-${amount}` : isCredit ? `+${amount}` : amount}
             </TableCell>
-            <TableCell>
-              {status}
+            <TableCell className="pl-2 pr-10">
+              <CategoryBadge category={status}/>
             </TableCell>
-            <TableCell>
+            <TableCell className="min-w-32 pl-2 pr-10">
               {formatDateTime(new Date(t.date)).dateTime}
             </TableCell>
-            <TableCell className="max-md:hidden">
+            <TableCell className="capitalize min-w-24 pl-2 pr-10">
               {t.paymentChannel}
             </TableCell>
-            <TableCell className="max-md:hidden">
-              {formatCategory(t.category)}
+            <TableCell className=" pl-2 pr-10 max-md:hidden">
+              <CategoryBadge category={formatCategory(t.category)} />
             </TableCell>
           </TableRow>
         )

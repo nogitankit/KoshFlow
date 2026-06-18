@@ -131,7 +131,7 @@ export async function createLinkToken(user: User){
   try{
     const tokenParams = {
       user:{
-        client_user_id: user.$id || user.id,
+        client_user_id: user.$id || user.userId,
       },
       client_name: user.name || `${user.firstName} ${user.lastName}`,
       products:['auth', 'transactions'] as Products[],
@@ -193,7 +193,7 @@ export async function exchangePublicToken({publicToken, user}: exchangePublicTok
 
     // Create bank account record with Plaid access token
     await createBankAccount({
-      userId: user.$id,
+      userId: user.$id || user.userId,
       bankId: itemId,
       accountId: accountData.account_id,
       accessToken,
