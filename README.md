@@ -18,6 +18,7 @@ Users can create an account, connect bank accounts through Plaid, view balances 
 * Internal money transfer functionality
 * Protected routes using server-side authentication
 * Row-Level Security (RLS) policies for database protection
+* Production-grade error tracking and performance monitoring using **Sentry**
 
 ---
 
@@ -45,6 +46,7 @@ Users can create an account, connect bank accounts through Plaid, view balances 
 
 * Plaid API
 * Plaid Transfer API (Sandbox)
+* Sentry (Error tracking and telemetry)
 
 ### Tooling
 
