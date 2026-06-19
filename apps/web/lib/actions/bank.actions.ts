@@ -40,10 +40,26 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
           institutionId: accountsResponse.data.item.institution_id!,
         });
 
+        // Calculate database balance adjustment
+        let balanceAdjustment = 0;
+        try {
+          const dbTransactions = await getTransactionsByBankId({ bankId: bank.accountId }) || [];
+          for (const t of dbTransactions) {
+            const amount = parseFloat(t.amount);
+            if (t.type === "debit") {
+              balanceAdjustment -= amount;
+            } else if (t.type === "credit") {
+              balanceAdjustment += amount;
+            }
+          }
+        } catch (e) {
+          console.warn("Could not calculate database balance adjustment:", e);
+        }
+
         const account = {
           id: accountData.account_id,
-          availableBalance: accountData.balances.available!,
-          currentBalance: accountData.balances.current!,
+          availableBalance: (accountData.balances.available! || 0) + balanceAdjustment,
+          currentBalance: (accountData.balances.current! || 0) + balanceAdjustment,
           institutionId: institution.institution_id,
           name: accountData.name,
           officialName: accountData.official_name,
@@ -87,18 +103,28 @@ export const getAccount = async ({ itemId }: { itemId: string }) => {
     });
 
     let transactions: any[] = [];
+    let balanceAdjustment = 0;
     try {
       const plaidTransactions = await getTransactions({ accessToken: bank?.access_token }) || [];
       const dbTransactions = await getTransactionsByBankId({ bankId: bank.accountId }) || [];
       transactions = [...plaidTransactions, ...dbTransactions];
+
+      for (const t of dbTransactions) {
+        const amount = parseFloat(t.amount);
+        if (t.type === "debit") {
+          balanceAdjustment -= amount;
+        } else if (t.type === "credit") {
+          balanceAdjustment += amount;
+        }
+      }
     } catch (e) {
       console.warn("Could not fetch transactions (consent may be missing):", e);
     }
 
     const account = {
       id: accountData.account_id,
-      availableBalance: accountData.balances.available!,
-      currentBalance: accountData.balances.current!,
+      availableBalance: (accountData.balances.available! || 0) + balanceAdjustment,
+      currentBalance: (accountData.balances.current! || 0) + balanceAdjustment,
       institutionId: institution.institution_id,
       name: accountData.name,
       officialName: accountData.official_name,

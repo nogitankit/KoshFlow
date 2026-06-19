@@ -78,11 +78,15 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
 
       const senderLegalName = `${senderUser.firstName} ${senderUser.lastName}`;
 
+      // Convert entered INR amount to USD (using the 1 USD = 100 INR rate matching the toInr helper)
+      const inrAmount = parseFloat(data.amount);
+      const usdAmount = (inrAmount / 100).toFixed(2);
+
       // create transfer
       const transfer = await createTransfer({
         accessToken: senderBank.access_token,
         accountId: senderBank.accountId,
-        amount: data.amount,
+        amount: usdAmount,
         legalName: senderLegalName,
         description: data.name,
       });
@@ -91,7 +95,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
       if (transfer) {
         const transaction = {
           name: data.name,
-          amount: data.amount,
+          amount: usdAmount,
           senderId: senderBank.userId,
           senderBankId: senderBank.accountId,
           receiverId: receiverBank.userId,

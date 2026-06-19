@@ -39,21 +39,41 @@ export default function PlaidLink({user, variant}: PlaidLinkProps){
 
   const {open, ready} = usePlaidLink(config)
 
-  const isDisabled = !mounted || !ready;
+  if (!mounted) {
+    return (
+      <>
+        {variant === 'primary' ? (
+          <Button className='plaidlink-primary' disabled={true}>
+            Connect bank
+          </Button>
+        ) : variant === 'ghost' ? (
+          <Button disabled={true} className='plaidlink-ghost'>
+            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} />
+            <p className='hidden text-[16px] font-semibold text-black-2 xl:block'>Connect bank</p>
+          </Button>
+        ) : (
+          <Button disabled={true} className='plaidlink-default'>
+            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} />
+            <p className='text-[16px] font-semibold text-black-2'>Connect bank</p>
+          </Button>
+        )}
+      </>
+    );
+  }
 
   return(
     <>
       {variant === 'primary' ? (
-        <Button className='plaidlink-primary' onClick={() => open()} disabled={isDisabled}>
+        <Button className='plaidlink-primary' onClick={() => open()} disabled={!ready}>
           Connect bank
         </Button>
       ) : variant === 'ghost' ? (
-        <Button onClick={() => open()} disabled={isDisabled} className='plaidlink-ghost'>
+        <Button onClick={() => open()} disabled={!ready} className='plaidlink-ghost'>
           <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24}  />
           <p className='hidden text-[16px] font-semibold text-black-2 xl:block'>Connect bank</p>
         </Button>
       ) : (
-        <Button onClick={() => open()} disabled={isDisabled} className='plaidlink-default'>
+        <Button onClick={() => open()} disabled={!ready} className='plaidlink-default'>
           <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24}  />
           <p className='text-[16px] font-semibold text-black-2'>Connect bank</p>
         </Button>
