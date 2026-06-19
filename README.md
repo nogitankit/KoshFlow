@@ -228,7 +228,7 @@ Building KoshFlow helped me get hands-on experience with:
 ## Running Locally
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/nogitankit/KoshFlow
 
 npm install
 
