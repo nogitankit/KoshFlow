@@ -88,7 +88,9 @@ export const getAccount = async ({ itemId }: { itemId: string }) => {
 
     let transactions: any[] = [];
     try {
-      transactions = await getTransactions({ accessToken: bank?.access_token }) || [];
+      const plaidTransactions = await getTransactions({ accessToken: bank?.access_token }) || [];
+      const dbTransactions = await getTransactionsByBankId({ bankId: bank.accountId }) || [];
+      transactions = [...plaidTransactions, ...dbTransactions];
     } catch (e) {
       console.warn("Could not fetch transactions (consent may be missing):", e);
     }
@@ -212,28 +214,40 @@ export const getTransactionsByBankId = async ({
 };
 
 // Create Transfer
-export const createTransfer = async () => {
-  const transferAuthRequest: TransferAuthorizationCreateRequest = {
-    access_token: "access-sandbox-cddd20c1-5ba8-4193-89f9-3a0b91034c25",
-    account_id: "Zl8GWV1jqdTgjoKnxQn1HBxxVBanm5FxZpnQk",
-    funding_account_id: "442d857f-fe69-4de2-a550-0c19dc4af467",
-    type: "credit" as TransferType,
-    network: "ach" as TransferNetwork,
-    amount: "10.00",
-    ach_class: "ppd" as ACHClass,
-    user: {
-      legal_name: "Anne Charleston",
-    },
-  };
+export const createTransfer = async ({
+  accessToken,
+  accountId,
+  amount,
+  legalName,
+  description,
+}: {
+  accessToken: string;
+  accountId: string;
+  amount: string;
+  legalName: string;
+  description: string;
+}) => {
   try {
+    const transferAuthRequest: TransferAuthorizationCreateRequest = {
+      access_token: accessToken,
+      account_id: accountId,
+      type: "debit" as TransferType,
+      network: "ach" as TransferNetwork,
+      amount,
+      ach_class: "ppd" as ACHClass,
+      user: {
+        legal_name: legalName,
+      },
+    };
+
     const transferAuthResponse =
       await plaidClient.transferAuthorizationCreate(transferAuthRequest);
     const authorizationId = transferAuthResponse.data.authorization.id;
 
     const transferCreateRequest: TransferCreateRequest = {
-      access_token: "access-sandbox-cddd20c1-5ba8-4193-89f9-3a0b91034c25",
-      account_id: "Zl8GWV1jqdTgjoKnxQn1HBxxVBanm5FxZpnQk",
-      description: "payment",
+      access_token: accessToken,
+      account_id: accountId,
+      description,
       authorization_id: authorizationId,
     };
 
@@ -248,5 +262,40 @@ export const createTransfer = async () => {
       "An error occurred while creating transfer authorization:",
       error
     );
+    throw error;
+  }
+};
+
+// Create Transaction in Supabase
+export const createTransaction = async (transaction: CreateTransactionProps) => {
+  try {
+    const cookieStore = await cookies();
+    const supabase = await createClient(cookieStore);
+
+    const { data, error } = await supabase
+      .from("transactions")
+      .insert({
+        name: transaction.name,
+        amount: transaction.amount,
+        senderId: transaction.senderId,
+        senderBankId: transaction.senderBankId,
+        receiverId: transaction.receiverId,
+        receiverBankId: transaction.receiverBankId,
+        email: transaction.email,
+        channel: "online",
+        category: "Transfer",
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error creating transaction in Supabase:", error);
+      throw error;
+    }
+
+    return parseStringify(data);
+  } catch (error) {
+    console.error("An error occurred while creating transaction:", error);
+    throw error;
   }
 };

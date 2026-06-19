@@ -248,3 +248,23 @@ export async function getBank({ documentId }: getBankProps) {
     throw err;
   }
 }
+
+export async function getBankByAccountId({ accountId }: getBankByAccountIdProps) {
+  try {
+    const cookieStore = await cookies();
+    const supabase = await createClient(cookieStore);
+
+    const { data, error } = await supabase
+      .from('banks')
+      .select('*')
+      .eq('accountId', accountId)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    return parseStringify(data);
+  } catch (err) {
+    console.error('Error getting bank:', err);
+    throw err;
+  }
+}

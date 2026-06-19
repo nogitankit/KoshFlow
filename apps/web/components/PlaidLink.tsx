@@ -9,7 +9,12 @@ import Image from 'next/image'
 
 export default function PlaidLink({user, variant}: PlaidLinkProps){
   const [token, setToken] = react.useState('');
+  const [mounted, setMounted] = react.useState(false);
   const router = useRouter()
+
+  react.useEffect(() => {
+    setMounted(true);
+  }, []);
   
   react.useEffect(() => {
     const getLinkToken = async () => {
@@ -34,19 +39,21 @@ export default function PlaidLink({user, variant}: PlaidLinkProps){
 
   const {open, ready} = usePlaidLink(config)
 
+  const isDisabled = !mounted || !ready;
+
   return(
     <>
       {variant === 'primary' ? (
-        <Button className='plaidlink-primary' onClick={() => open()} disabled={!ready}>
+        <Button className='plaidlink-primary' onClick={() => open()} disabled={isDisabled}>
           Connect bank
         </Button>
       ) : variant === 'ghost' ? (
-        <Button onClick={() => open()} disabled={!ready} className='plaidlink-ghost'>
+        <Button onClick={() => open()} disabled={isDisabled} className='plaidlink-ghost'>
           <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24}  />
           <p className='hidden text-[16px] font-semibold text-black-2 xl:block'>Connect bank</p>
         </Button>
       ) : (
-        <Button onClick={() => open()} disabled={!ready} className='plaidlink-default'>
+        <Button onClick={() => open()} disabled={isDisabled} className='plaidlink-default'>
           <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24}  />
           <p className='text-[16px] font-semibold text-black-2'>Connect bank</p>
         </Button>
