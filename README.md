@@ -250,6 +250,7 @@ PLAID_SECRET=
 PLAID_ENV=sandbox
 PLAID_PRODUCTS=auth,transactions,identity
 PLAID_COUNTRY_CODES=US, CA
+```
 
 ---
 
