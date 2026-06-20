@@ -2,24 +2,18 @@ import React from 'react'
 import HeaderBox from '@/components/headerBox'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
 import RightSidebar from '@/components/RightSidebar'
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getAccounts, getAccount } from '@/lib/actions/bank.actions'
-import { getUserInfo } from '@/lib/actions/user.actions'
+import { getLoggedInUser, getAccounts, getAccount } from '@/lib/actions/cached'
 import { toInr } from '@/lib/utils'
 import RecentTransactions from '@/components/RecentTransactions'
 
 const HomePage = async ({ searchParams }: SearchParamProps) => {
   const { id, page } = await searchParams;
   const currentPage = Number(page as string) || 1
-  const cookieStore = await cookies()
-  const supabase = await createClient(cookieStore)
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
+  const loggedIn = await getLoggedInUser()
+  if (!loggedIn) {
     redirect('/sign-in')
   }
-  const loggedIn = await getUserInfo({ userId: user.id })
   const accounts = await getAccounts({userId: loggedIn.userId}) 
   const accountsData = accounts?.data?.map((a: any) => ({ ...a, currentBalance: toInr(a.currentBalance) }))
   const totalCurrentBalanceInr = toInr(accounts?.totalCurrentBalance)
@@ -52,7 +46,7 @@ const HomePage = async ({ searchParams }: SearchParamProps) => {
       </div>
       <RightSidebar
        user={loggedIn}  
-       transactions={accounts?.transactions}
+       transactions={account.transactions}
        banks={accountsData?.slice(0, 2)}
       />
     </section>

@@ -2,10 +2,13 @@ import react from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import BankCard from './BankCard'
+import { countTransactionCategories } from '@/lib/utils'
+import Category from './Category'
 
 export default function RightSidebar({user, transactions, banks}: RightSidebarProps) {
   const firstName = user?.firstName || user?.email || 'User'
-  const name = `${user?.firstName} ${user?.lastName}`
+  const name = `${user?.firstName} ${user?.lastName}` 
+  const categories: CategoryCount[] = countTransactionCategories(transactions)
   return(
     <aside className='right-sidebar'>
       <section className='flex flex-col pb-7'>
@@ -34,11 +37,11 @@ export default function RightSidebar({user, transactions, banks}: RightSidebarPr
             </h2>
           </Link>
         </div>
-        {banks?.length > 0 && (
+        {banks && banks[0] && (
           <div className='relative flex flex-1 flex-col items-center justify-center gap-5'>
             <div className='relative z-10'>
               <BankCard 
-                key={banks[0].$id}
+                key={banks[0].id}
                 account={banks[0]}
                 userName={name}
                 showBalance={false}
@@ -47,7 +50,7 @@ export default function RightSidebar({user, transactions, banks}: RightSidebarPr
             {banks[1] &&  (
               <div className='absolute right-0 top-8 z-0 w-[90%]'>
                 <BankCard 
-                  key={banks[1].$id}
+                  key={banks[1].id}
                   account={banks[1]}
                   userName={name}
                   showBalance={false}
@@ -57,6 +60,16 @@ export default function RightSidebar({user, transactions, banks}: RightSidebarPr
 
           </div>
         )}
+        <div className='mt-10 flex flex-1 flex-col gap-6'>
+          <h2 className='header-2'>
+            Top Categories
+          </h2> 
+          <div className='space-y-5'>
+            {categories.map((category, index) => (
+              <Category key={category.name} category={category} />
+            ))}
+          </div>
+        </div>
       </section>
     </aside>
   )

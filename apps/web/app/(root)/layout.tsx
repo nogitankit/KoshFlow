@@ -1,23 +1,17 @@
 import Sidebar from '@/components/Sidebar'
 import MobileNav from '@/components/MobileNav'
 import Image from 'next/image'
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getUserInfo } from '@/lib/actions/user.actions'
+import { getLoggedInUser } from '@/lib/actions/cached'
 
 export default async function RootLayout({
   children,
 }: Readonly<{children: React.ReactNode}>) {
-  const cookieStore = await cookies()
-  const supabase = await createClient(cookieStore)
-  const { data: { user } } = await supabase.auth.getUser()
+  const loggedIn = await getLoggedInUser()
 
-  if (!user) {
+  if (!loggedIn) {
     redirect('/sign-in')
   }
-
-  const loggedIn = await getUserInfo({ userId: user.id })
 
   return (
     <main className="flex h-screen w-full font-inter">

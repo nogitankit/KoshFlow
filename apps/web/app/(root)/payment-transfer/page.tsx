@@ -1,21 +1,14 @@
 import HeaderBox from '@/components/headerBox'
-import react from 'react'
-import { cookies } from 'next/headers'
-import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import React from 'react'
-import { getAccounts } from '@/lib/actions/bank.actions'
-import { getUserInfo } from '@/lib/actions/user.actions'
+import { getLoggedInUser, getAccounts } from '@/lib/actions/cached'
 import { toInr } from '@/lib/utils'
 import PaymentTransferForm from '@/components/PaymentTransferForm'
 export default async function PaymentTransfer() {
-  const cookieStore = await cookies()
-  const supabase = await createClient(cookieStore)
-   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
+  const loggedIn = await getLoggedInUser()
+  if (!loggedIn) {
     redirect('/sign-in')
   }
-  const loggedIn = await getUserInfo({ userId: user.id })
   const accounts = await getAccounts({userId: loggedIn.userId}) 
   const accountsData = accounts?.data
   return(
