@@ -19,10 +19,10 @@ export default function Footer({user, type}: FooterProps){
   return (
     <footer className='footer'>
       <div className={clsx({
-        'footer-name': type === 'desktop',
-        'footer-name_mobile': type === 'mobile',
+        'footer_name': type === 'desktop',
+        'footer_name-mobile': type === 'mobile',
       })}>
-        <p className='text-xl font-bold text-gray-700'>
+        <p className='text-xl font-bold text-indigo-400'>
           {firstName[0]?.toUpperCase()}
         </p>
       </div>
@@ -30,16 +30,17 @@ export default function Footer({user, type}: FooterProps){
         'footer_email-mobile' : type === 'mobile',
         'footer_email': type === 'desktop',
       })}>
-        <h1 className='text-14 truncate font-semibold text-gray-700'>
+        <h1 className='text-14 truncate font-semibold text-slate-200'>
           {name}
         </h1>
-        <p className='text-14 truncate font-normal text-gray-600'>
+        <p className='text-14 truncate font-normal text-slate-400'>
           {email}
         </p>
       </div>
       <div className='footer_image' onClick={handleLogOut}>
-        <Image src='/icons/logout.svg' width={20} height={20}  alt='logout'/>
+        <Image src='/icons/logout.svg' width={20} height={20} alt='logout' className='brightness-0 invert opacity-60 hover:opacity-100 transition-opacity cursor-pointer'/>
       </div>
     </footer>
   )
-} 
+}
+ 

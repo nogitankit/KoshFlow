@@ -115,26 +115,26 @@ export function getAccountTypeColors(type: AccountTypes) {
   switch (type) {
     case "depository":
       return {
-        bg: "bg-blue-25",
-        lightBg: "bg-blue-100",
-        title: "text-blue-900",
-        subText: "text-blue-700",
+        bg: "bg-indigo-950/30",
+        lightBg: "bg-indigo-900/30",
+        title: "text-indigo-300",
+        subText: "text-indigo-400",
       };
 
     case "credit":
       return {
-        bg: "bg-success-25",
-        lightBg: "bg-success-100",
-        title: "text-success-900",
-        subText: "text-success-700",
+        bg: "bg-emerald-950/30",
+        lightBg: "bg-emerald-900/30",
+        title: "text-emerald-300",
+        subText: "text-emerald-400",
       };
 
     default:
       return {
-        bg: "bg-green-25",
-        lightBg: "bg-green-100",
-        title: "text-green-900",
-        subText: "text-green-700",
+        bg: "bg-cyan-950/30",
+        lightBg: "bg-cyan-900/30",
+        title: "text-cyan-300",
+        subText: "text-cyan-400",
       };
   }
 }

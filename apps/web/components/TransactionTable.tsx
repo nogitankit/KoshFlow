@@ -27,14 +27,14 @@ export function CategoryBadge({category}: CategoryBadgeProps){
 export default function TransactionTable({transactions}: TransactionTableProps){
   return(
     <Table>
-    <TableHeader className="bg-[#f9fafb]">
-      <TableRow>
-      <TableHead className="px-2">Transaction</TableHead>
-      <TableHead className="px-2">Amount</TableHead>
-      <TableHead className="px-2">Status</TableHead>
-      <TableHead className="px-2">Date</TableHead>
-      <TableHead className="px-2 max-md:hidden">Channel</TableHead>
-      <TableHead className="px-2 max-md:hidden">Category</TableHead>
+    <TableHeader className="bg-slate-900/50">
+      <TableRow className="border-b border-white/5 hover:bg-transparent">
+      <TableHead className="px-2 text-slate-400">Transaction</TableHead>
+      <TableHead className="px-2 text-slate-400">Amount</TableHead>
+      <TableHead className="px-2 text-slate-400">Status</TableHead>
+      <TableHead className="px-2 text-slate-400">Date</TableHead>
+      <TableHead className="px-2 max-md:hidden text-slate-400">Channel</TableHead>
+      <TableHead className="px-2 max-md:hidden text-slate-400">Category</TableHead>
     </TableRow>
   </TableHeader>
   <TableBody>
@@ -46,31 +46,31 @@ export default function TransactionTable({transactions}: TransactionTableProps){
         const isCredit = t.type === 'credit'
         return (
           <TableRow key={t.id} className={
-            clsx('!over:bg-none border-b-default', {
-              'bg-[#f5e0e0]': isDebit || amount[0] === '-',
-              'bg-[#beefd0]': isCredit || amount[0] != '-',
+            clsx('border-b border-white/5 hover:bg-white/5 transition-colors', {
+              'bg-rose-950/15': isDebit || amount[0] === '-',
+              'bg-emerald-950/15': isCredit || amount[0] != '-',
             })
           }>
             <TableCell className="max-w-[250px] pl-2 pr-10">
               <div className="flex items-center gap-3">
-                <h1 className="text-14 truncate font-semibold text-[#344054]">
+                <h1 className="text-14 truncate font-semibold text-slate-200">
                   {removeSpecialCharacters(t.name)}
                 </h1>
               </div>
             </TableCell>
             <TableCell className={clsx( "pl-2 pr-10 font-semibold", {
-              'text-[#f04438]': isDebit || amount[0] === '-',
-              'text-[#039855]': isCredit || amount[0] != '-',
+              'text-rose-400': isDebit || amount[0] === '-',
+              'text-emerald-400': isCredit || amount[0] != '-',
             })}>
               {isDebit ? `-${amount}` : isCredit ? `+${amount}` : amount}
             </TableCell>
             <TableCell className="pl-2 pr-10">
               <CategoryBadge category={status}/>
             </TableCell>
-            <TableCell className="min-w-32 pl-2 pr-10">
+            <TableCell className="min-w-32 pl-2 pr-10 text-slate-400">
               {formatDateTime(new Date(t.date)).dateTime}
             </TableCell>
-            <TableCell className="capitalize min-w-24 pl-2 pr-10">
+            <TableCell className="capitalize min-w-24 pl-2 pr-10 text-slate-400">
               {t.paymentChannel}
             </TableCell>
             <TableCell className=" pl-2 pr-10 max-md:hidden">

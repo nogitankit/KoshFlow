@@ -48,13 +48,13 @@ export default function PlaidLink({user, variant}: PlaidLinkProps){
           </Button>
         ) : variant === 'ghost' ? (
           <Button disabled={true} className='plaidlink-ghost'>
-            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} />
-            <p className='hidden text-[16px] font-semibold text-black-2 xl:block'>Connect bank</p>
+            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
+            <p className='hidden text-[16px] font-semibold text-slate-400 xl:block'>Connect bank</p>
           </Button>
         ) : (
           <Button disabled={true} className='plaidlink-default'>
-            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} />
-            <p className='text-[16px] font-semibold text-black-2'>Connect bank</p>
+            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
+            <p className='text-[16px] font-semibold text-slate-400'>Connect bank</p>
           </Button>
         )}
       </>
@@ -69,13 +69,13 @@ export default function PlaidLink({user, variant}: PlaidLinkProps){
         </Button>
       ) : variant === 'ghost' ? (
         <Button onClick={() => open()} disabled={!ready} className='plaidlink-ghost'>
-          <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24}  />
-          <p className='hidden text-[16px] font-semibold text-black-2 xl:block'>Connect bank</p>
+          <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
+          <p className='hidden text-[16px] font-semibold text-slate-400 xl:block'>Connect bank</p>
         </Button>
       ) : (
         <Button onClick={() => open()} disabled={!ready} className='plaidlink-default'>
-          <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24}  />
-          <p className='text-[16px] font-semibold text-black-2'>Connect bank</p>
+          <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
+          <p className='text-[16px] font-semibold text-slate-400'>Connect bank</p>
         </Button>
       )} 
     </>

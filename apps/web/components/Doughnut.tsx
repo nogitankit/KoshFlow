@@ -12,7 +12,9 @@ export default function Component({accounts}: DoughnutChartProps){
       {
         label: 'Banks',
         data: balances, 
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        backgroundColor: ['#818cf8', '#22d3ee', '#a78bfa', '#34d399', '#f472b6'],
+        borderColor: ['#6366f1', '#06b6d4', '#8b5cf6', '#10b981', '#ec4899'],
+        borderWidth: 2,
       }
     ],
     labels: accountNames

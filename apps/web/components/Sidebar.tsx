@@ -7,11 +7,12 @@ import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import Footer from './Footer'
 import PlaidLink from './PlaidLink'
+
 export default function Sidebar({user}: SidebarProps) {
   const pathName = usePathname() 
   return(
     <section className='sidebar'>
-      <nav className='flex flex-col gap-5'>
+      <nav className='flex flex-col gap-4'>
         <Link href='/' className='mb-10 cursor-pointer items-center gap-3 flex'>
           <Image
             src='/icons/logo.svg'
@@ -22,34 +23,35 @@ export default function Sidebar({user}: SidebarProps) {
           />
           <h1 className='sidebar-logo'>KoshFlow</h1>
         </Link>
-        {sidebarLinks.map((item) =>{
-
-        const isActive = pathName === item.route || pathName.startsWith(`${item.route}/`)
-        // dynamically applying styles using clsx and twMerge
-        return(
-          <Link href={item.route} key={item.label}
-          className={cn('sidebar-link', {
-            'bg-bank-gradient' : isActive
-          })}
-          >
-            <div className='relative size-6'>
-              <Image src={item.imgURL} alt={item.label} fill
-              className={cn({
-                'brightness-[3] invert-0' : isActive 
+        {sidebarLinks.map((item) => {
+          const isActive = pathName === item.route || pathName.startsWith(`${item.route}/`)
+          return(
+            <Link href={item.route} key={item.label}
+              className={cn('sidebar-link', {
+                'bg-indigo-600/15 border border-indigo-500/20 shadow-lg shadow-indigo-600/5': isActive,
+                'hover:bg-white/5': !isActive,
               })}
-              />
-            </div>
-            <p className={cn(
-              'sidebar-label',{
-              'text-white!': isActive
-            })} 
-            >{item.label}</p>
-          </Link>
-        )
+            >
+              <div className='relative size-6'>
+                <Image src={item.imgURL} alt={item.label} fill
+                  className={cn('transition-all duration-200', {
+                    'brightness-[3] invert-0': isActive,
+                    'opacity-60': !isActive,
+                  })}
+                />
+              </div>
+              <p className={cn(
+                'sidebar-label transition-colors duration-200', {
+                'text-indigo-300!': isActive,
+                'hover:text-slate-200': !isActive,
+              })} 
+              >{item.label}</p>
+            </Link>
+          )
         })}
         <PlaidLink user={user} />
       </nav>
       <Footer user={user} />
     </section>
   )
-}
+}

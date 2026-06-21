@@ -1,16 +1,19 @@
 import './globals.css'
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@workspace/ui/lib/utils";
-import {Inter, IBM_Plex_Serif} from "next/font/google"
+import { Inter, DM_Sans, JetBrains_Mono } from "next/font/google"
 
 const inter = Inter({
-  subsets:['latin'],
-  variable:'--font-inter'
+  subsets: ['latin'],
+  variable: '--font-inter',
 })
-const ibmPlexSerif = IBM_Plex_Serif({
-  subsets:['latin'],
-  variable:'--font-ibm-plex-serif',
-  weight:['400', '500', '600', '700']
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+})
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
 })
 
 export const metadata = {
@@ -30,9 +33,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", inter.variable, ibmPlexSerif.variable)}
+      className={cn("antialiased", inter.variable, dmSans.variable, jetBrainsMono.variable)}
     >
-      <body>
+      <body className="min-h-screen bg-[#020617] text-slate-100">
         {children}
       </body>
     </html>

@@ -15,7 +15,7 @@ export default function RightSidebar({user, transactions, banks}: RightSidebarPr
         <div className='profile-banner' />
         <div className='profile'>
           <div className='profile-img'>
-            <span className='text-5xl font-bold text-blue-500'>{firstName[0]?.toUpperCase()}</span>
+            <span className='text-5xl font-bold text-indigo-400'>{firstName[0]?.toUpperCase()}</span>
           </div>
           <div className='profile-details'>
             <h1 className='profile-name'>
@@ -31,8 +31,8 @@ export default function RightSidebar({user, transactions, banks}: RightSidebarPr
         <div className='flex w-full justify-between'>
           <h2 className='header-2'>My Banks</h2>
           <Link href='/' className='flex gap-2'>
-            <Image src='/icons/plus.svg' width={20} height={20} alt='plus' />
-            <h2 className='text-14 font-semibold text-gray-600'>
+            <Image src='/icons/plus.svg' width={20} height={20} alt='plus' className='brightness-0 invert opacity-70' />
+            <h2 className='text-14 font-semibold text-slate-400'>
               Add Bank
             </h2>
           </Link>
@@ -73,4 +73,4 @@ export default function RightSidebar({user, transactions, banks}: RightSidebarPr
       </section>
     </aside>
   )
-}
+}
