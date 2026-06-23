@@ -24,31 +24,39 @@ const HomePage = async ({ searchParams }: SearchParamProps) => {
     <section className='home'>
       <div className="home-content">
         <header className='home-header'>
-          <HeaderBox 
-            type="greeting"
-            title="Welcome"
-            user={loggedIn?.firstName || "Guest"}
-            subtext="Welcome to KoshFlow. Manage your Accounts and Transactions Securely and Efficiently."
-          />
+          <div className='animate-fadeInUp'>
+            <HeaderBox 
+              type="greeting"
+              title="Welcome"
+              user={loggedIn?.firstName || "Guest"}
+              subtext="Welcome to KoshFlow. Manage your Accounts and Transactions Securely and Efficiently."
+            />
+          </div>
         
-        <TotalBalanceBox 
-          accounts={accountsData}
-          totalBanks={accounts?.totalBanks}
-          totalCurrentBalance={totalCurrentBalanceInr}
-        />
+          <div className='animate-fadeInUp animate-delay-2'>
+            <TotalBalanceBox 
+              accounts={accountsData}
+              totalBanks={accounts?.totalBanks}
+              totalCurrentBalance={totalCurrentBalanceInr}
+            />
+          </div>
         </header>
-        <RecentTransactions 
-          accounts={accountsData}
-          transactions={account?.transactions}
-          itemId={itemId}
-          page={currentPage}
+        <div className='animate-fadeInUp animate-delay-3'>
+          <RecentTransactions 
+            accounts={accountsData}
+            transactions={account?.transactions}
+            itemId={itemId}
+            page={currentPage}
+          />
+        </div>
+      </div>
+      <div className='animate-fadeInUp animate-delay-4'>
+        <RightSidebar
+         user={loggedIn}  
+         transactions={account.transactions}
+         banks={accountsData?.slice(0, 2)}
         />
       </div>
-      <RightSidebar
-       user={loggedIn}  
-       transactions={account.transactions}
-       banks={accountsData?.slice(0, 2)}
-      />
     </section>
   )
 }

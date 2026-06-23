@@ -33,7 +33,7 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
         const accountsResponse = await plaidClient.accountsGet({
           access_token: bank.access_token,
         });
-        const accountData = accountsResponse.data.accounts[0];
+        const accountData = accountsResponse.data.accounts[0]!;
 
         // get institution info from plaid
         const institution = await getInstitution({
@@ -95,7 +95,7 @@ export const getAccount = async ({ itemId }: { itemId: string }) => {
     const accountsResponse = await plaidClient.accountsGet({
       access_token: bank.access_token,
     });
-    const accountData = accountsResponse.data.accounts[0];
+    const accountData = accountsResponse.data.accounts[0]!;
 
     // get institution info from plaid
     const institution = await getInstitution({

@@ -1,13 +1,11 @@
-import { cookies } from "next/headers";
 import { createAdminClient } from "@/utils/supabase/admin";
-
+// import {cookies} from 'next/headers'
 export default async function Page() {
-  const cookieStore = await cookies();
-  const supabase = createAdminClient(cookieStore);
-
-const response = await supabase
-  .from("users")
-  .select("*");
+  const supabase = createAdminClient();
+//pass cookies param if breaks idk
+  const response = await supabase
+    .from("users")
+    .select("*");
 
   return (
     <pre>

@@ -1,64 +1,68 @@
 'use client'
-import react from 'react'
-import type { User } from '@supabase/supabase-js'
-import Link from 'next/link'
+import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
-import Form from './Form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import * as z from "zod"
 import { Loader2 } from 'lucide-react'
-import { CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { authFormSchema } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/actions/user.actions'
 import PlaidLink from "./PlaidLink"
+import Form from './Form'
 
-
-export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
+export default function AuthForm({type: initialType} : {type : 'sign-in' | 'sign-up'}) {
   const router = useRouter()
-  const formSchema = authFormSchema(type)
-  const defaultValues =
-    type === 'sign-in'
-      ? { email: "", password: "" }
-      : {
-          firstName: "",
-          lastName: "",
-          address1: "",
-          city: "",
-          state: "",
-          postalCode: "",
-          dateOfBirth: "",
-          ssn: "",
-          email: "",
-          password: "",
-        }
+  const [mode, setMode] = useState<'sign-in' | 'sign-up'>(initialType)
+  const [user, setUser] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const signUpFieldsRef = useRef<HTMLDivElement>(null)
+
+  const formSchema = authFormSchema(mode)
+  const allDefaults = {
+    firstName: "",
+    lastName: "",
+    address1: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    dateOfBirth: "",
+    email: "",
+    password: "",
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues,
-    shouldUnregister: true,
+    defaultValues: allDefaults,
   })
-  const [user, setUser] = react.useState<User | null>(null)
-  const [isLoading, setIsLoading] = react.useState(false)
+
+  // Reset form when mode changes
+  const handleModeToggle = () => {
+    const newMode = mode === 'sign-in' ? 'sign-up' : 'sign-in'
+    setMode(newMode)
+    setError(null)
+    form.reset(allDefaults)
+  }
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    try{ //maybe its _metadata
-      if(type === 'sign-up'){
+    setError(null)
+    try {
+      if (mode === 'sign-up') {
         const userData = {
-        firstName: data.firstName!,
-        lastName: data.lastName!,
-        address1: data.address1!,
-        city: data.city!,
-        state: data.state!,
-        postalCode: data.postalCode!,
-        dateOfBirth: data.dateOfBirth!,
-        email: data.email,
-        password: data.password,
-      }
+          firstName: data.firstName!,
+          lastName: data.lastName!,
+          address1: data.address1!,
+          city: data.city!,
+          state: data.state!,
+          postalCode: data.postalCode!,
+          dateOfBirth: data.dateOfBirth!,
+          email: data.email,
+          password: data.password,
+        }
         const response = await signUp(userData)
         if (response.user) {
           setUser({
@@ -73,120 +77,165 @@ export default function AuthForm({type} : {type : 'sign-in' | 'sign-up'}) {
             state: userData.state,
             postalCode: userData.postalCode,
             dateOfBirth: userData.dateOfBirth,
-          } as any)
+          })
         }
-      }
-      else if(type === 'sign-in'){
+      } else if (mode === 'sign-in') {
         const response = await signIn({
           email: data.email,
           password: data.password,
         })
-        if(response){
+        if (response) {
           router.push('/')
         }
       }
-      
-    }
-    catch(err){
-      console.log(err)
-    }
-    finally{
+    } catch (err: any) {
+      console.error(err)
+      setError(err?.message || 'Something went wrong. Please try again.')
+    } finally {
       setIsLoading(false)
     }
-   
-  
   }
-  return(
-    <section className='auth-form'>
-      <header className='flex flex-col gap-5 md:gap-8'>
-        <Link href='/' className='cursor-pointer items-center gap-2 flex'>
-            <Image
-              src='/icons/logo.svg'
-              width={34}
-              height={34}
-              alt='logo'
-            />
-            <h1 className='text-26 font-ibm-plex-serif font-bold text-black-1'>KoshFlow</h1>
-            </Link>
-            <div className='flex flex-col gap-2 md:gap-3'>
-              <h1 className='text-24 lg:text-36 font-semibold text-gray-900'>
-                {user 
-                ? "Link Account" : type ==='sign-in' ? "Sign In" : "Sign Up"
-                }
-              </h1>
-              <p className='text-16 font-normal text-gray-600'>
-                {user 
-                ? "Link your account to get started!" 
-                : "Please enter your details." 
-                }
-              </p>
-            </div>
+
+  const isSignUp = mode === 'sign-up'
+
+  return (
+    <section className='auth-form animate-fadeInUp'>
+      {/* Logo & Header */}
+      <header className='relative z-10 flex flex-col gap-5'>
+        <div className='flex items-center gap-2.5'>
+          <Image
+            src='/icons/logo.svg'
+            width={32}
+            height={32}
+            alt='KoshFlow logo'
+          />
+          <h1 className='text-24 font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-(family-name:--font-dm-sans)'>
+            KoshFlow
+          </h1>
+        </div>
+        <div className='flex flex-col gap-1.5'>
+          <h2 className='text-24 lg:text-30 font-semibold text-white'>
+            {user
+              ? "Link Account"
+              : isSignUp ? "Create Account" : "Welcome Back"
+            }
+          </h2>
+          <p className='text-14 font-normal text-slate-400'>
+            {user
+              ? "Link your bank account to get started."
+              : isSignUp
+                ? "Enter your details to create your account."
+                : "Sign in to access your dashboard."
+            }
+          </p>
+        </div>
       </header>
-      {
-        user ? (
-          <div className='flex flex-col gap-4'>
-            <PlaidLink user={user} variant='primary'/>
-          </div>
-        )
-        : (
-          <>
-            <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit, (errors) => {
-                  // Log validation errors to help debug why submit isn't called
-                  console.log('validation errors', errors)
-                }
-              )}
+
+      {/* Error Banner */}
+      {error && (
+        <div className='relative z-10 flex items-center gap-2 rounded-lg border border-rose-500/20 bg-rose-950/30 px-4 py-3 text-[13px] text-rose-400 animate-fadeInUp'>
+          <span className='shrink-0'>⚠</span>
+          <p>{error}</p>
+        </div>
+      )}
+
+      {user ? (
+        <div className='relative z-10 flex flex-col gap-4'>
+          <PlaidLink user={user} variant='primary'/>
+        </div>
+      ) : (
+        <>
+          <form
+            id="auth-form"
+            onSubmit={form.handleSubmit(onSubmit, (errors) => {
+              console.log('validation errors', errors)
+            })}
+            className='relative z-10 flex flex-col gap-1'
+          >
+            {/* Sign Up Fields — animated expand/collapse */}
+            <div
+              ref={signUpFieldsRef}
+              className='auth-fields-enter'
+              style={{
+                maxHeight: isSignUp ? '600px' : '0px',
+                opacity: isSignUp ? 1 : 0,
+                pointerEvents: isSignUp ? 'auto' : 'none',
+              }}
             >
-              {type === 'sign-up' && (
-                <FieldGroup className='mb-4'>
-                  <div className='flex gap-4'>
-                    <Form control={form.control} type='firstName' name='First name' placeholder='e.g. Ankit'/>
-                    <Form control={form.control} type='lastName' name='Last name' placeholder='e.g. Sharma'/>
+              <FieldGroup className='mb-4 flex flex-col gap-3'>
+                <div className='flex gap-3'>
+                  <div className={`flex-1 ${isSignUp ? 'animate-fadeInUp animate-delay-1' : ''}`}>
+                    <Form control={form.control} type='firstName' name='First Name' placeholder='e.g. Ankit'/>
                   </div>
+                  <div className={`flex-1 ${isSignUp ? 'animate-fadeInUp animate-delay-2' : ''}`}>
+                    <Form control={form.control} type='lastName' name='Last Name' placeholder='e.g. Sharma'/>
+                  </div>
+                </div>
 
-                  <Form control={form.control} type='address1' name='Address' placeholder='Enter your specific address'/>
+                <div className={isSignUp ? 'animate-fadeInUp animate-delay-2' : ''}>
+                  <Form control={form.control} type='address1' name='Address' placeholder='Enter your address'/>
+                </div>
+                <div className={isSignUp ? 'animate-fadeInUp animate-delay-3' : ''}>
                   <Form control={form.control} type='city' name='City' placeholder='e.g. Mumbai'/>
-                  <div className='flex gap-4'>
-                    <Form control={form.control} type='state' name='State' placeholder='e.g. Mumbai'/>
-                    <Form control={form.control} type='postalCode' name='Postal Code' placseholder='e.g. 11101'/>
+                </div>
+                <div className='flex gap-3'>
+                  <div className={`flex-1 ${isSignUp ? 'animate-fadeInUp animate-delay-3' : ''}`}>
+                    <Form control={form.control} type='state' name='State' placeholder='e.g. Maharashtra'/>
                   </div>
-                  
-                  <Form control={form.control} type='dateOfBirth' name='Date of Birth' placeholder='DD-MM-YYYY'/>
-                </FieldGroup>
-              )}
-              <FieldGroup>
-                <Form control={form.control} type='email' name='Email' placeholder='Enter your email'/>
-                <Form control={form.control} type='password' name='Password' placeholder='Enter your password'/>
+                  <div className={`flex-1 ${isSignUp ? 'animate-fadeInUp animate-delay-4' : ''}`}>
+                    <Form control={form.control} type='postalCode' name='Postal Code' placeholder='e.g. 400001'/>
+                  </div>
+                </div>
+
+                <div className={isSignUp ? 'animate-fadeInUp animate-delay-4' : ''}>
+                  <Form control={form.control} type='dateOfBirth' name='Date of Birth' placeholder='YYYY-MM-DD'/>
+                </div>
               </FieldGroup>
-              <CardFooter className='bg-inherit'>
-              <Field orientation="horizontal" className='flex flex-col gap-4 mt-8'>
-                <Button type="submit" form="form-rhf-demo" className='form-btn p-4 w-full' disabled={isLoading}> 
-                  {isLoading ? (
-                    <>
-                      <Loader2 size={20} className='animate-spin'/> &nbsp;
-                      Loading...
-                    </>
-                  ): type === 'sign-in' ? 'Sign In' : 'Sign Up'
-                  }
-                </Button>
-              </Field>
-            </CardFooter>
-            </form>
-            <footer className='flex justify-center gap-1'>
-              <p className='text-14 font-normal text-gray-600'> 
-                {type === 'sign-in'
-                ? "Don't have an account?"
-                : "Already have an account?"
+            </div>
+
+            {/* Email & Password — always visible */}
+            <FieldGroup className='flex flex-col gap-3'>
+              <Form control={form.control} type='email' name='Email' placeholder='Enter your email'/>
+              <Form control={form.control} type='password' name='Password' placeholder='Enter your password'/>
+            </FieldGroup>
+
+            {/* Submit */}
+            <div className='mt-6'>
+              <Button
+                type="submit"
+                form="auth-form"
+                className='form-btn p-4 w-full h-12'
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 size={18} className='animate-spin mr-2' />
+                    {isSignUp ? 'Creating Account...' : 'Signing In...'}
+                  </>
+                ) : isSignUp ? 'Create Account' : 'Sign In'
                 }
-              </p>
-              <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'} className='form-link'>
-                {type === 'sign-in' ? 'Sign Up' : 'Sign In'}
-              </Link>
+              </Button>
+            </div>
+          </form>
 
-            </footer>
-          </>
-        )
-      }
-
+          {/* Mode Toggle */}
+          <footer className='relative z-10 flex justify-center gap-1 pt-2'>
+            <p className='text-14 font-normal text-slate-500'>
+              {isSignUp
+                ? "Already have an account?"
+                : "Don't have an account?"
+              }
+            </p>
+            <button
+              type='button'
+              onClick={handleModeToggle}
+              className='form-link'
+            >
+              {isSignUp ? 'Sign In' : 'Sign Up'}
+            </button>
+          </footer>
+        </>
+      )}
     </section>
   )
 }

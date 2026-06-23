@@ -11,9 +11,15 @@ export default function TotalBalanceBox({accounts=[], totalBanks, totalCurrentBa
       </div>
 
       <div className="flex flex-col gap-6">
-        <h2 className="header-2">
-          Bank Accounts: {totalBanks}
-        </h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-[11px] uppercase tracking-[0.12em] font-semibold text-slate-400">
+            Bank Accounts
+          </h2>
+          <span className="text-slate-600">·</span>
+          <span className="text-[13px] font-semibold text-indigo-400 font-(family-name:--font-jetbrains-mono)">
+            {totalBanks}
+          </span>
+        </div>
         <div className="flex flex-col gap-2">
           <p className="total-balance-label">
             Total Current Balance

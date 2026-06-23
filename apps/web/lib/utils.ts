@@ -152,8 +152,9 @@ export function countTransactionCategories(
       const category = transaction.category;
 
       // If the category exists in the categoryCounts object, increment its count
-      if (categoryCounts.hasOwnProperty(category)) {
-        categoryCounts[category]++;
+      const currentCount = categoryCounts[category];
+      if (currentCount !== undefined) {
+        categoryCounts[category] = currentCount + 1;
       } else {
         // Otherwise, initialize the count to 1
         categoryCounts[category] = 1;
@@ -167,7 +168,7 @@ export function countTransactionCategories(
   const aggregatedCategories: CategoryCount[] = Object.keys(categoryCounts).map(
     (category) => ({
       name: category,
-      count: categoryCounts[category],
+      count: categoryCounts[category] || 0,
       totalCount,
     })
   );

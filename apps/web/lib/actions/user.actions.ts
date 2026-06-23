@@ -189,7 +189,7 @@ export async function exchangePublicToken({publicToken, user}: exchangePublicTok
     const accountResponse = await plaidClient.accountsGet({
       access_token: accessToken,
     });
-    const accountData = accountResponse.data.accounts[0];
+    const accountData = accountResponse.data.accounts[0]!;
 
     // Create bank account record with Plaid access token
     await createBankAccount({

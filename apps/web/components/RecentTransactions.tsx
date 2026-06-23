@@ -24,11 +24,15 @@ export default function RecentTransactions({
   return (
     <section className='recent-transactions'>
       <header className='flex items-center justify-between'>
-        <h2 className='recent-transactions-label'>
-          Recent Transactions
-        </h2>
-        <Link href={`/transaction-history/?id=${itemId}`} className='view-all-btn'>
-        View all
+        <div className='flex flex-col gap-1'>
+          <span className='text-[11px] uppercase tracking-[0.12em] font-semibold text-slate-500'>Activity</span>
+          <h2 className='recent-transactions-label'>
+            Recent Transactions
+          </h2>
+        </div>
+        <Link href={`/transaction-history/?id=${itemId}`} className='view-all-btn group inline-flex items-center gap-2'>
+          View all
+          <span className='inline-block transition-transform duration-200 group-hover:translate-x-0.5'>→</span>
         </Link>
       </header>
       <Tabs defaultValue={itemId} className="w-[w-full]">

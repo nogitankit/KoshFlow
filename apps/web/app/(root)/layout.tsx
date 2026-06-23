@@ -14,7 +14,7 @@ export default async function RootLayout({
   }
 
   return (
-    <main className="flex h-screen w-full font-[family-name:var(--font-inter)] bg-[#020617] bg-[radial-gradient(circle_at_50%_30%,#1e293b_0%,#0f172a_70%,#020617_100%)]">
+    <main className="flex h-screen w-full font-(family-name:--font-inter) bg-[#020617] bg-[radial-gradient(circle_at_50%_30%,#1e293b_0%,#0f172a_70%,#020617_100%)]">
       <Sidebar user={loggedIn} />
       <div className='flex size-full flex-col'>
         <div className='root-layout'>
