@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import { getLoggedInUser, getAccounts } from '@/lib/actions/cached'
 import { toInr } from '@/lib/utils'
-import PaymentTransferForm from '@/components/PaymentTransferForm'
+import PaymentTransferWizard from '@/components/PaymentTransferWizard'
+
 export default async function PaymentTransfer() {
   const loggedIn = await getLoggedInUser()
   if (!loggedIn) {
@@ -15,8 +16,7 @@ export default async function PaymentTransfer() {
     <section className='payment-transfer'>
       <HeaderBox title='Payment Transfer' subtext='Please provide any specific details or notes related to payment transfer' />
       <section className='size-full pt-5'>
-        <PaymentTransferForm accounts={accountsData} />
-
+        <PaymentTransferWizard accounts={accountsData} />
       </section>
     </section>
   )

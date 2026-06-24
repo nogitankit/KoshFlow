@@ -216,7 +216,7 @@
 }
 
 @utility home {
-  @apply no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll;
+  @apply no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll overflow-x-hidden;
   position: relative;
   &::before {
     content: '';
@@ -233,7 +233,7 @@
 }
 
 @utility home-content {
-  @apply no-scrollbar flex w-full flex-1 flex-col gap-8 px-5 sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll;
+  @apply no-scrollbar flex min-w-0 flex-1 flex-col gap-8 px-5 sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll;
 }
 
 @utility home-header {
@@ -292,7 +292,7 @@
 
 /* Sidebar Columns */
 @utility right-sidebar {
-  @apply no-scrollbar hidden h-screen max-h-screen flex-col border-l border-white/5 bg-slate-950/60 backdrop-blur-md xl:flex w-88.75 xl:overflow-y-scroll;
+  @apply no-scrollbar hidden h-screen max-h-screen shrink-0 flex-col border-l border-white/5 bg-slate-950/60 backdrop-blur-md xl:flex w-88.75 xl:overflow-y-scroll;
   position: relative;
 }
 
@@ -527,7 +527,7 @@
 
 /* Wire & Payment Transfers Form Components */
 @utility payment-transfer {
-  @apply no-scrollbar flex flex-col overflow-y-scroll bg-[#020617] p-8 md:max-h-screen xl:py-12;
+  @apply no-scrollbar flex flex-col flex-1 bg-transparent p-8 min-h-screen xl:py-12;
 }
 
 @utility payment-transfer_form-item {

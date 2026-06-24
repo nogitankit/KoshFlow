@@ -14,6 +14,7 @@ export const Category = ({ category }: CategoryProps) => {
     icon,
   } = topCategoryStyles[category.name as keyof typeof topCategoryStyles] ||
   topCategoryStyles.default;
+  console.log('icon', icon)
 
   return (
     <div className={cn("gap-4.5 flex p-4 rounded-xl border border-transparent hover:border-white/5 transition-all duration-300 group/cat cursor-default", bg)}>
@@ -23,7 +24,7 @@ export const Category = ({ category }: CategoryProps) => {
       <div className="flex w-full flex-1 flex-col gap-2">
         <div className="text-14 flex justify-between">
           <h2 className={cn("font-medium", main)}>{formatCategory(category.name)}</h2> 
-          <h3 className={cn("font-normal font-(family-name:--font-jetbrains-mono) text-[13px]", count)}>{category.count}</h3>
+          <h3 className={cn("font-normal font-jetbrains-mono text-[13px]", count)}>{category.count}</h3>
         </div>
         <Progress
           value={(category.count / category.totalCount) * 100}
@@ -34,4 +35,4 @@ export const Category = ({ category }: CategoryProps) => {
     </div>
   );
 };
-export default Category;
+export default Category;

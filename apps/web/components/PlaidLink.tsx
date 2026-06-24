@@ -1,22 +1,24 @@
-import react, { SetStateAction, useCallback, useEffect } from 'react'
+"use client"
+
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { PlaidLinkOptions } from 'react-plaid-link'
 import { useRouter } from 'next/navigation'
 import { createLinkToken, exchangePublicToken } from '@/lib/actions/user.actions'
-import { PlaidLinkOnSuccess, usePlaidLink } from 'react-plaid-link';
+import { PlaidLinkOnSuccess, usePlaidLink } from 'react-plaid-link'
 import Image from 'next/image'
+import { cn } from '@/lib/utils'
 
-
-export default function PlaidLink({user, variant}: PlaidLinkProps){
-  const [token, setToken] = react.useState('');
-  const [mounted, setMounted] = react.useState(false);
+export default function PlaidLink({ user, variant }: PlaidLinkProps) {
+  const [token, setToken] = useState('')
+  const [mounted, setMounted] = useState(false)
   const router = useRouter()
 
-  react.useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
-  react.useEffect(() => {
+  useEffect(() => {
     const getLinkToken = async () => {
       const data = await createLinkToken(user)
       if (data) setToken(data)
@@ -24,7 +26,7 @@ export default function PlaidLink({user, variant}: PlaidLinkProps){
     getLinkToken()
   }, [user])
 
-  const onSuccess = useCallback<PlaidLinkOnSuccess>(async (public_token : string) => {
+  const onSuccess = useCallback<PlaidLinkOnSuccess>(async (public_token: string) => {
     await exchangePublicToken({
       publicToken: public_token,
       user,
@@ -37,47 +39,39 @@ export default function PlaidLink({user, variant}: PlaidLinkProps){
     onSuccess
   }
 
-  const {open, ready} = usePlaidLink(config)
+  const { open, ready } = usePlaidLink(config)
 
-  if (!mounted) {
-    return (
-      <>
-        {variant === 'primary' ? (
-          <Button className='plaidlink-primary' disabled={true}>
-            Connect bank
-          </Button>
-        ) : variant === 'ghost' ? (
-          <Button disabled={true} className='plaidlink-ghost'>
-            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
-            <p className='hidden text-[16px] font-semibold text-slate-400 xl:block'>Connect bank</p>
-          </Button>
-        ) : (
-          <Button disabled={true} className='plaidlink-default'>
-            <Image src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
-            <p className='text-[16px] font-semibold text-slate-400'>Connect bank</p>
-          </Button>
-        )}
-      </>
-    );
-  }
+  const isDisabled = !mounted || !ready
 
-  return(
+  return (
     <>
       {variant === 'primary' ? (
-        <Button className='plaidlink-primary' onClick={() => open()} disabled={!ready}>
+        <Button className='plaidlink-primary' onClick={() => open()} disabled={isDisabled}>
           Connect bank
         </Button>
       ) : variant === 'ghost' ? (
-        <Button onClick={() => open()} disabled={!ready} className='plaidlink-ghost'>
-          <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
+        <Button onClick={() => open()} disabled={isDisabled} className='plaidlink-ghost'>
+          <Image 
+            src='/icons/connect-bank.svg' 
+            alt='connect bank' 
+            width={24} 
+            height={24} 
+            className={cn('brightness-0 invert', isDisabled ? 'opacity-60' : 'opacity-100')} 
+          />
           <p className='hidden text-[16px] font-semibold text-slate-400 xl:block'>Connect bank</p>
         </Button>
       ) : (
-        <Button onClick={() => open()} disabled={!ready} className='plaidlink-default'>
-          <Image  src='/icons/connect-bank.svg' alt='connect bank' width={24} height={24} className='brightness-0 invert opacity-60' />
+        <Button onClick={() => open()} disabled={isDisabled} className='plaidlink-default'>
+          <Image 
+            src='/icons/connect-bank.svg' 
+            alt='connect bank' 
+            width={24} 
+            height={24} 
+            className={cn('brightness-0 invert', isDisabled ? 'opacity-60' : 'opacity-100')} 
+          />
           <p className='text-[16px] font-semibold text-slate-400'>Connect bank</p>
         </Button>
       )} 
     </>
   )
-}
+}

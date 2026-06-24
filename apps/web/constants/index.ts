@@ -61,7 +61,7 @@ export const topCategoryStyles = {
       bg: "bg-indigo-950/50",
       indicator: "bg-indigo-500",
     },
-    icon: "/icons/monitor.svg",
+    icon: "/icons/a-coffee.svg",
   },
   Travel: {
     bg: "bg-emerald-950/30",
@@ -75,6 +75,71 @@ export const topCategoryStyles = {
       indicator: "bg-emerald-500",
     },
     icon: "/icons/coins.svg",
+  },
+  Payment: {
+    bg: "bg-amber-950/30",
+    circleBg: "bg-amber-900/40",
+    text: {
+      main: "text-amber-300",
+      count: "text-amber-400",
+    },
+    progress: {
+      bg: "bg-amber-950/50",
+      indicator: "bg-amber-500",
+    },
+    icon: "/icons/money-send.svg",
+  },
+  "Bank Fees": {
+    bg: "bg-violet-950/30",
+    circleBg: "bg-violet-900/40",
+    text: {
+      main: "text-violet-300",
+      count: "text-violet-400",
+    },
+    progress: {
+      bg: "bg-violet-950/50",
+      indicator: "bg-violet-500",
+    },
+    icon: "/icons/dollar-circle.svg",
+  },
+  Transfer: {
+    bg: "bg-cyan-950/30",
+    circleBg: "bg-cyan-900/40",
+    text: {
+      main: "text-cyan-300",
+      count: "text-cyan-400",
+    },
+    progress: {
+      bg: "bg-cyan-950/50",
+      indicator: "bg-cyan-500",
+    },
+    icon: "/icons/bank-transfer.svg",
+  },
+  Processing: {
+    bg: "bg-slate-950/30",
+    circleBg: "bg-slate-900/40",
+    text: {
+      main: "text-slate-300",
+      count: "text-slate-400",
+    },
+    progress: {
+      bg: "bg-slate-950/50",
+      indicator: "bg-slate-500",
+    },
+    icon: "/icons/transaction.svg",
+  },
+  Success: {
+    bg: "bg-teal-950/30",
+    circleBg: "bg-teal-900/40",
+    text: {
+      main: "text-teal-300",
+      count: "text-teal-400",
+    },
+    progress: {
+      bg: "bg-teal-950/50",
+      indicator: "bg-teal-500",
+    },
+    icon: "/icons/deposit.svg",
   },
   default: {
     bg: "bg-rose-950/30",
