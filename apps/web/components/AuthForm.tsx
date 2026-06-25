@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/actions/user.actions'
 import PlaidLink from "./PlaidLink"
 import Form from './Form'
+import ShinyText from './ShinyText'
+
 
 export default function AuthForm({type: initialType} : {type : 'sign-in' | 'sign-up'}) {
   const router = useRouter()
@@ -48,6 +50,7 @@ export default function AuthForm({type: initialType} : {type : 'sign-in' | 'sign
   }
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    if (isLoading) return
     setIsLoading(true)
     setError(null)
     try {
@@ -109,8 +112,8 @@ export default function AuthForm({type: initialType} : {type : 'sign-in' | 'sign
             height={32}
             alt='KoshFlow logo'
           />
-          <h1 className='text-24 font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-(family-name:--font-dm-sans)'>
-            KoshFlow
+          <h1 className='text-24 font-bold font-(family-name:--font-dm-sans) flex items-center'>
+            <ShinyText text="KoshFlow" speed={3} color="#ffffff" shineColor="#818cf8" />
           </h1>
         </div>
         <div className='flex flex-col gap-1.5'>
@@ -229,7 +232,8 @@ export default function AuthForm({type: initialType} : {type : 'sign-in' | 'sign
             <button
               type='button'
               onClick={handleModeToggle}
-              className='form-link'
+              className='form-link disabled:opacity-50 disabled:cursor-not-allowed'
+              disabled={isLoading}
             >
               {isSignUp ? 'Sign In' : 'Sign Up'}
             </button>

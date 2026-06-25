@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 import { getLoggedInUser } from '@/lib/actions/cached'
 import Particles from '@/components/Particles'
 
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout({
   children,
 }: Readonly<{children: React.ReactNode}>) {

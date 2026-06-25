@@ -14,7 +14,6 @@ export const Category = ({ category }: CategoryProps) => {
     icon,
   } = topCategoryStyles[category.name as keyof typeof topCategoryStyles] ||
   topCategoryStyles.default;
-  console.log('icon', icon)
 
   return (
     <div className={cn("gap-4.5 flex p-4 rounded-xl border border-transparent hover:border-white/5 transition-all duration-300 group/cat cursor-default", bg)}>

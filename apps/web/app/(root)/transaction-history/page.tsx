@@ -13,7 +13,7 @@ export default async function TransactionHistory({searchParams}: SearchParamProp
     redirect('/sign-in')
   }
   const accounts = await getAccounts({userId: loggedIn.userId}) 
-  const accountsData = accounts?.data?.map((a: any) => ({ ...a, currentBalance: toInr(a.currentBalance) }))
+  const accountsData = accounts?.data || []
   if(!accounts) return;
   const itemId = (id as string) || accountsData[0]?.itemId;
   const account = await getAccount({ itemId });

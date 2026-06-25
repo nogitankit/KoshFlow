@@ -8,6 +8,8 @@ import { usePathname } from 'next/navigation'
 import Footer from './Footer'
 import PlaidLink from './PlaidLink'
 
+import ShinyText from './ShinyText'
+
 export default function Sidebar({user}: SidebarProps) {
   const pathName = usePathname() 
   return(
@@ -21,7 +23,9 @@ export default function Sidebar({user}: SidebarProps) {
             alt='logo'
             className='size-8.5 max-xl:size-14'
           />
-          <h1 className='sidebar-logo'>KoshFlow</h1>
+          <h1 className='sidebar-logo flex items-center'>
+            <ShinyText text="KoshFlow" speed={3} color="#ffffff" shineColor="#818cf8" />
+          </h1>
         </Link>
         {sidebarLinks.map((item) => {
           const isActive = pathName === item.route || pathName.startsWith(`${item.route}/`)

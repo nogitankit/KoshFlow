@@ -16,6 +16,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import ShinyText from './ShinyText'
+import PlaidLink from './PlaidLink'
 
 export default function MobileNav({user} : MobileNavProps) {
   const pathName = usePathname()
@@ -39,7 +41,9 @@ export default function MobileNav({user} : MobileNavProps) {
               height={34}
               alt='logo'
             />
-            <h1 className='text-26 font-[family-name:var(--font-dm-sans)] font-bold text-white'>KoshFlow</h1>
+            <h1 className='text-26 font-[family-name:var(--font-dm-sans)] font-bold text-white flex items-center'>
+              <ShinyText text="KoshFlow" speed={3} color="#ffffff" shineColor="#818cf8" />
+            </h1>
             </Link>
             <div className='mobilenav-sheet'>
               <SheetClose asChild>
@@ -72,6 +76,11 @@ export default function MobileNav({user} : MobileNavProps) {
                   })}
                 </nav>
               </SheetClose>
+              <div className='px-4 py-2 mt-4'>
+                <SheetClose asChild>
+                  <PlaidLink user={user} />
+                </SheetClose>
+              </div>
               <Footer user={user} type="mobile"/>
             </div>
         

@@ -35,6 +35,13 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
         });
         const accountData = accountsResponse.data.accounts[0]!;
 
+        console.log(`[Plaid API] Raw getAccounts balance for "${accountData.name}" (${accountData.official_name || 'No Official Name'}):`, {
+          available: accountData.balances.available,
+          current: accountData.balances.current,
+          limit: accountData.balances.limit,
+          currency: accountData.balances.iso_currency_code || accountData.balances.unofficial_currency_code
+        });
+
         // get institution info from plaid
         const institution = await getInstitution({
           institutionId: accountsResponse.data.item.institution_id!,
@@ -96,6 +103,13 @@ export const getAccount = async ({ itemId }: { itemId: string }) => {
       access_token: bank.access_token,
     });
     const accountData = accountsResponse.data.accounts[0]!;
+
+    console.log(`[Plaid API] Raw getAccount balance for "${accountData.name}" (${accountData.official_name || 'No Official Name'}):`, {
+      available: accountData.balances.available,
+      current: accountData.balances.current,
+      limit: accountData.balances.limit,
+      currency: accountData.balances.iso_currency_code || accountData.balances.unofficial_currency_code
+    });
 
     // get institution info from plaid
     const institution = await getInstitution({
